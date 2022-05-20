@@ -113,27 +113,51 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message1(client, userdata, msg):
     message = json.loads(msg.payload)
-    print('OBU1: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    # print('OBU1: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    if msg.topic == 'vanetza/out/cam':
+        print('OBU1: ' + 'CAM ' ' from OBU' + str(message['stationID']))
+    elif msg.topic == 'vanetza/out/denm':
+        print('OBU1: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message2(client, userdata, msg):
     message = json.loads(msg.payload)
-    print('OBU2: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    # print('OBU2: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    if msg.topic == 'vanetza/out/cam':
+        print('OBU2: ' + 'CAM ' ' from OBU' + str(message['stationID']))
+    elif msg.topic == 'vanetza/out/denm':
+        print('OBU2: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message3(client, userdata, msg):
     message = json.loads(msg.payload)
-    print('OBU3: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    # print('OBU3: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    if msg.topic == 'vanetza/out/cam':
+        print('OBU3: ' + 'CAM ' ' from OBU' + str(message['stationID']))
+    elif msg.topic == 'vanetza/out/denm':
+        print('OBU3: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message4(client, userdata, msg):
     message = json.loads(msg.payload)
-    print('OBU4: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    # print('OBU4: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    if msg.topic == 'vanetza/out/cam':
+        print('OBU4: ' + 'CAM ' ' from OBU' + str(message['stationID']))
+    elif msg.topic == 'vanetza/out/denm':
+        print('OBU4: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message5(client, userdata, msg):
     message = json.loads(msg.payload)
-    print('OBU5: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    # print('OBU5: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    if msg.topic == 'vanetza/out/cam':
+        print('OBU5: ' + 'CAM ' ' from OBU' + str(message['stationID']))
+    elif msg.topic == 'vanetza/out/denm':
+        print('OBU5: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message6(client, userdata, msg):
     message = json.loads(msg.payload)
-    print('OBU6: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    # print('OBU6: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    if msg.topic == 'vanetza/out/cam':
+        print('OBU6: ' + 'CAM ' ' from OBU' + str(message['stationID']))
+    elif msg.topic == 'vanetza/out/denm':
+        print('OBU6: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def loop_start():
     for broker in brokers:
