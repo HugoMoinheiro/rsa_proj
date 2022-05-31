@@ -1,0 +1,15 @@
+causeCodes:
+1 - encontra-se na fila da direita e sai na primeira saída
+2 - encontra-se na fila da direita e sai na segunda saída
+3 - encontra-se na fila da direita e sai na terceira saída
+4 - encontra-se na fila do meio e sai na primeira saída
+5 - encontra-se na fila do meio e sai na segunda saída
+6 - encontra-se na fila do meio e sai na terceira saída
+7 - encontra-se na fila da esquerda e sai na primeira saída
+8 - encontra-se na fila da esquerda e sai na segunda saída
+9 - encontra-se na fila da esquerda e sai na terceira saída
+10 - troca de veículo na fila da esquerda com veículo na fila do meio
+11 - troca de veículo na fila da direita com veículo na fila do meio
+12 - veículo troca de fila do meio para a direita
+13 - veículo troca de fila da esqueda para o meio
+14 - veículo sai na saída pretendida

@@ -1,6 +1,8 @@
 import paho.mqtt.client as mqtt
 import time
 import json
+import random
+from vehicle import Vehicle
 
 brokers = []
 
@@ -106,6 +108,58 @@ demoDenm = '''{
     }
 }'''
 
+def createDenm(id):
+    return '''{
+    "accEngaged": true,
+    "acceleration": 0,
+    "altitude": 800001,
+    "altitudeConf": 15,
+    "brakePedal": true,
+    "collisionWarning": true,
+    "cruiseControl": true,
+    "curvature": 1023,
+    "driveDirection": "FORWARD",
+    "emergencyBrake": true,
+    "gasPedal": false,
+    "heading": 3601,
+    "headingConf": 127,
+    "latitude": 400000000,
+    "length": 100,
+    "longitude": -80000000,
+    "semiMajorConf": 4095,
+    "semiMajorOrient": 3601,
+    "semiMinorConf": 4095,
+    "specialVehicle": {
+        "publicTransportContainer": {
+            "embarkationStatus": false
+        }
+    },
+    "speed": 16383,
+    "speedConf": 127,
+    "speedLimiter": true,
+    "stationID": '''+str(id)+''',
+    "stationType": 15,
+    "width": 30,
+    "yawRate": 0
+}'''
+
+row_ls = [1,1,2,2,3,3] #1 -> right, 2 -> middle, 3 -> left
+exit_ls = [1,2,3,random.randint(1, 3),random.randint(1, 3),random.randint(1, 3)]
+random.shuffle(row_ls)
+random.shuffle(exit_ls)
+vehicle1 = Vehicle(row_ls.pop(),exit_ls.pop(),1)
+vehicle2 = Vehicle(row_ls.pop(),exit_ls.pop(),2)
+vehicle3 = Vehicle(row_ls.pop(),exit_ls.pop(),3)
+vehicle4 = Vehicle(row_ls.pop(),exit_ls.pop(),4)
+vehicle5 = Vehicle(row_ls.pop(),exit_ls.pop(),5)
+vehicle6 = Vehicle(row_ls.pop(),exit_ls.pop(),6)
+print(vehicle1.vehicle_info())
+print(vehicle2.vehicle_info())
+print(vehicle3.vehicle_info())
+print(vehicle4.vehicle_info())
+print(vehicle5.vehicle_info())
+print(vehicle6.vehicle_info())
+
 def on_connect(client, userdata, flags, rc):
     print('Connected with code ' + str(rc))
     client.subscribe('vanetza/out/cam')
@@ -206,6 +260,6 @@ while running:
         brokers[4].publish('vanetza/in/denm', str(demoDenm))
         brokers[5].publish('vanetza/in/denm', str(demoDenm))
     idx = idx + 1
-    time.sleep(1)
+    time.sleep(10)
 
 loop_stop()
