@@ -13,3 +13,20 @@ causeCodes:
 12 - veículo troca de fila do meio para a direita
 13 - veículo troca de fila da esqueda para o meio
 14 - veículo sai na saída pretendida
+
+
+causeCode:
+1 - sai na primeira saída
+2 - sai na segunda saída
+3 - sai na terceira saída
+
+4 - troca de veículo na fila da esquerda com veículo na fila do meio
+5 - troca de veículo na fila da direita com veículo na fila do meio
+6 - veículo troca de fila do meio para a direita
+7 - veículo troca de fila da esqueda para o meio
+8 - veículo sai na saída pretendida
+
+
+cpm - para detetar em que fila o veículo está
+
+geopy para incrementar metros a uma coordenada inicial
