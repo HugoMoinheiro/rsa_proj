@@ -55,9 +55,9 @@ def createCam(id):
     "gasPedal": false,
     "heading": 3601,
     "headingConf": 127,
-    "latitude": 400000000,
+    "latitude": 41.21290935191144,
     "length": 100,
-    "longitude": -80000000,
+    "longitude": -8.690446105593898,
     "semiMajorConf": 4095,
     "semiMajorOrient": 3601,
     "semiMinorConf": 4095,
@@ -108,39 +108,38 @@ demoDenm = '''{
     }
 }'''
 
-def createDenm(id):
+def createDenm(id,causeCode):
     return '''{
-    "accEngaged": true,
-    "acceleration": 0,
-    "altitude": 800001,
-    "altitudeConf": 15,
-    "brakePedal": true,
-    "collisionWarning": true,
-    "cruiseControl": true,
-    "curvature": 1023,
-    "driveDirection": "FORWARD",
-    "emergencyBrake": true,
-    "gasPedal": false,
-    "heading": 3601,
-    "headingConf": 127,
-    "latitude": 400000000,
-    "length": 100,
-    "longitude": -80000000,
-    "semiMajorConf": 4095,
-    "semiMajorOrient": 3601,
-    "semiMinorConf": 4095,
-    "specialVehicle": {
-        "publicTransportContainer": {
-            "embarkationStatus": false
-        }
+    "management": {
+        "actionID": {
+            "originatingStationID": '''+str(id)+''',
+            "sequenceNumber": 0
+        },
+        "detectionTime": 1626453837.658,
+        "referenceTime": 1626453837.658,
+        "eventPosition": {
+            "latitude": 40.637799251415686,
+            "longitude": -8.652353364491056,
+            "positionConfidenceEllipse": {
+                "semiMajorConfidence": 0,
+                "semiMinorConfidence": 0,
+                "semiMajorOrientation": 0
+            },
+            "altitude": {
+                "altitudeValue": 0,
+                "altitudeConfidence": 1
+            }
+        },
+        "validityDuration": 0,
+        "stationType": 0
     },
-    "speed": 16383,
-    "speedConf": 127,
-    "speedLimiter": true,
-    "stationID": '''+str(id)+''',
-    "stationType": 15,
-    "width": 30,
-    "yawRate": 0
+    "situation": {
+        "informationQuality": 7,
+        "eventType": {
+            "causeCode": '''+str(causeCode)+''',
+            "subCauseCode": 14
+        }
+    }
 }'''
 
 row_ls = [1,1,2,2,3,3] #1 -> right, 2 -> middle, 3 -> left
@@ -240,7 +239,7 @@ for broker in brokers:
     idx = idx + 1
 
 loop_start()
-time.sleep(0.1)
+time.sleep(1)
 
 idx = 0
 running = True
@@ -253,13 +252,13 @@ while running:
     brokers[4].publish('vanetza/in/cam', str(createCam(5)))
     brokers[5].publish('vanetza/in/cam', str(createCam(6)))
     if idx%5 == 0:
-        brokers[0].publish('vanetza/in/denm', str(demoDenm))
-        brokers[1].publish('vanetza/in/denm', str(demoDenm))
-        brokers[2].publish('vanetza/in/denm', str(demoDenm))
-        brokers[3].publish('vanetza/in/denm', str(demoDenm))
-        brokers[4].publish('vanetza/in/denm', str(demoDenm))
-        brokers[5].publish('vanetza/in/denm', str(demoDenm))
+        brokers[0].publish('vanetza/in/denm', str(createDenm(1,vehicle1.process_initial_cause_code())))
+        brokers[1].publish('vanetza/in/denm', str(createDenm(2,vehicle1.process_initial_cause_code())))
+        brokers[2].publish('vanetza/in/denm', str(createDenm(3,vehicle1.process_initial_cause_code())))
+        brokers[3].publish('vanetza/in/denm', str(createDenm(4,vehicle1.process_initial_cause_code())))
+        brokers[4].publish('vanetza/in/denm', str(createDenm(5,vehicle1.process_initial_cause_code())))
+        brokers[5].publish('vanetza/in/denm', str(createDenm(6,vehicle1.process_initial_cause_code())))
+        time.sleep(5)
     idx = idx + 1
-    time.sleep(10)
 
 loop_stop()
