@@ -1,31 +1,26 @@
+import geopy
+import geopy.distance
+
 class Vehicle:
-    def __init__(self, row, exit, id):
-        self.row=row
+    def __init__(self, id, exit, coords):
+        #self.row=row
         self.exit=exit
         self.id=id
+        self.speed=40 #km/h
+        self.geo_point=geopy.Point(coords[0], coords[1])
+        self.position_id=coords[2]
+
 
     def vehicle_info(self):
-        return f' Vehicle: {self.id}' + " / Row: " + f'{self.row}' + " / Exit: " + f'{self.exit}'
+        return f' Vehicle: {self.id}' + " / Exit: " + f'{self.exit}' + " / Speed: " + f'{self.speed}' + " / Position: " + f'{self.position_id}' + " / Latitude: " + f'{self.geo_point.latitude}' + " / Longitude: " + f'{self.geo_point.longitude}'
         
     def process_initial_cause_code(self):
-        if self.row == 1:
-            if self.exit == 1:
-                return 1
-            elif self.exit == 2:
-                return 2
-            else:
-                return 3
-        elif self.row == 2:
-            if self.exit == 1:
-                return 4
-            elif self.exit == 2:
-                return 5
-            else:
-                return 6
-        else:
-            if self.exit == 1:
-                return 7
-            elif self.exit == 2:
-                return 8
-            else:
-                return 9
+        return self.exit
+
+    def update_speed(self, new_speed):
+        self.speed=new_speed
+
+    def update_geo_point(self):
+        meters_traveled = self.speed / 3.6 #gets the meters traveled in 1 second
+        d = geopy.distance.distance(meters=meters_traveled)
+        self.geo_point = d.destination(point=self.geo_point, bearing=0) #bearing = 0 = north

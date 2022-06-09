@@ -2,45 +2,15 @@ import paho.mqtt.client as mqtt
 import time
 import json
 import random
+import geopy
+import geopy.distance
 from vehicle import Vehicle
 
 brokers = []
 
-demoCam = '''{
-    "accEngaged": true,
-    "acceleration": 0,
-    "altitude": 800001,
-    "altitudeConf": 15,
-    "brakePedal": true,
-    "collisionWarning": true,
-    "cruiseControl": true,
-    "curvature": 1023,
-    "driveDirection": "FORWARD",
-    "emergencyBrake": true,
-    "gasPedal": false,
-    "heading": 3601,
-    "headingConf": 127,
-    "latitude": 400000000,
-    "length": 100,
-    "longitude": -80000000,
-    "semiMajorConf": 4095,
-    "semiMajorOrient": 3601,
-    "semiMinorConf": 4095,
-    "specialVehicle": {
-        "publicTransportContainer": {
-            "embarkationStatus": false
-        }
-    },
-    "speed": 16383,
-    "speedConf": 127,
-    "speedLimiter": true,
-    "stationID": 1,
-    "stationType": 15,
-    "width": 30,
-    "yawRate": 0
-}'''
+initial_coords = [[41.198193, -8.627468, 4], [41.198187, -8.627429, 5], [41.198183, -8.627389, 6], [41.198290, -8.627454, 1], [41.198287, -8.627414, 2], [41.198282, -8.627371, 3]]
 
-def createCam(id):
+def createCam(id, latitude, longitude):
     return '''{
     "accEngaged": true,
     "acceleration": 0,
@@ -55,9 +25,9 @@ def createCam(id):
     "gasPedal": false,
     "heading": 3601,
     "headingConf": 127,
-    "latitude": 41.21290935191144,
-    "length": 100,
-    "longitude": -8.690446105593898,
+    "latitude": '''+str(latitude)+''',
+    "length": 10.0,
+    "longitude": '''+str(longitude)+''',
     "semiMajorConf": 4095,
     "semiMajorOrient": 3601,
     "semiMinorConf": 4095,
@@ -71,41 +41,8 @@ def createCam(id):
     "speedLimiter": true,
     "stationID": '''+str(id)+''',
     "stationType": 15,
-    "width": 30,
+    "width": 3.0,
     "yawRate": 0
-}'''
-
-demoDenm = '''{
-    "management": {
-        "actionID": {
-            "originatingStationID": 1798587532,
-            "sequenceNumber": 0
-        },
-        "detectionTime": 1626453837.658,
-        "referenceTime": 1626453837.658,
-        "eventPosition": {
-            "latitude": 40.637799251415686,
-            "longitude": -8.652353364491056,
-            "positionConfidenceEllipse": {
-                "semiMajorConfidence": 0,
-                "semiMinorConfidence": 0,
-                "semiMajorOrientation": 0
-            },
-            "altitude": {
-                "altitudeValue": 0,
-                "altitudeConfidence": 1
-            }
-        },
-        "validityDuration": 0,
-        "stationType": 0
-    },
-    "situation": {
-        "informationQuality": 7,
-        "eventType": {
-            "causeCode": 14,
-            "subCauseCode": 14
-        }
-    }
 }'''
 
 def createDenm(id,causeCode):
@@ -118,8 +55,8 @@ def createDenm(id,causeCode):
         "detectionTime": 1626453837.658,
         "referenceTime": 1626453837.658,
         "eventPosition": {
-            "latitude": 40.637799251415686,
-            "longitude": -8.652353364491056,
+            "latitude": 41.198193,
+            "longitude": -8.627468,
             "positionConfidenceEllipse": {
                 "semiMajorConfidence": 0,
                 "semiMinorConfidence": 0,
@@ -145,13 +82,14 @@ def createDenm(id,causeCode):
 row_ls = [1,1,2,2,3,3] #1 -> right, 2 -> middle, 3 -> left
 exit_ls = [1,2,3,random.randint(1, 3),random.randint(1, 3),random.randint(1, 3)]
 random.shuffle(row_ls)
+random.shuffle(initial_coords)
 random.shuffle(exit_ls)
-vehicle1 = Vehicle(row_ls.pop(),exit_ls.pop(),1)
-vehicle2 = Vehicle(row_ls.pop(),exit_ls.pop(),2)
-vehicle3 = Vehicle(row_ls.pop(),exit_ls.pop(),3)
-vehicle4 = Vehicle(row_ls.pop(),exit_ls.pop(),4)
-vehicle5 = Vehicle(row_ls.pop(),exit_ls.pop(),5)
-vehicle6 = Vehicle(row_ls.pop(),exit_ls.pop(),6)
+vehicle1 = Vehicle(1, exit_ls.pop(),initial_coords.pop())
+vehicle2 = Vehicle(2, exit_ls.pop(),initial_coords.pop())
+vehicle3 = Vehicle(3, exit_ls.pop(),initial_coords.pop())
+vehicle4 = Vehicle(4, exit_ls.pop(),initial_coords.pop())
+vehicle5 = Vehicle(5, exit_ls.pop(),initial_coords.pop())
+vehicle6 = Vehicle(6, exit_ls.pop(),initial_coords.pop())
 print(vehicle1.vehicle_info())
 print(vehicle2.vehicle_info())
 print(vehicle3.vehicle_info())
@@ -166,50 +104,57 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message1(client, userdata, msg):
     message = json.loads(msg.payload)
-    # print('OBU1: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
+    #print(message)
     if msg.topic == 'vanetza/out/cam':
         print('OBU1: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
         print('OBU1: ' + 'DENM' + ' from OBU' + str(message['stationID']))
+        print(message['fields']['denm']['situation']['eventType']['causeCode'])
+        print(message['fields']['denm']['management']['eventPosition']['longitude'])
 
 def on_message2(client, userdata, msg):
     message = json.loads(msg.payload)
-    # print('OBU2: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
     if msg.topic == 'vanetza/out/cam':
+        pass
         print('OBU2: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
+        pass
         print('OBU2: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message3(client, userdata, msg):
     message = json.loads(msg.payload)
-    # print('OBU3: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
     if msg.topic == 'vanetza/out/cam':
+        pass
         print('OBU3: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
+        pass
         print('OBU3: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message4(client, userdata, msg):
     message = json.loads(msg.payload)
-    # print('OBU4: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
     if msg.topic == 'vanetza/out/cam':
+        pass
         print('OBU4: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
+        pass
         print('OBU4: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message5(client, userdata, msg):
     message = json.loads(msg.payload)
-    # print('OBU5: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
     if msg.topic == 'vanetza/out/cam':
+        pass
         print('OBU5: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
+        pass
         print('OBU5: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message6(client, userdata, msg):
     message = json.loads(msg.payload)
-    # print('OBU6: ' + str(msg.topic) + '\t from OBU' + str(message['stationID']))
     if msg.topic == 'vanetza/out/cam':
+        pass
         print('OBU6: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
+        pass
         print('OBU6: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def loop_start():
@@ -219,6 +164,14 @@ def loop_start():
 def loop_stop():
     for broker in brokers:
         broker.loop_stop(force=False)
+
+def update_geo_point():
+    vehicle1.update_geo_point()
+    vehicle2.update_geo_point()
+    vehicle3.update_geo_point()
+    vehicle4.update_geo_point()
+    vehicle5.update_geo_point()
+    vehicle6.update_geo_point()
 
 for i in range(1,7):
     obu_name = 'broker'+str(i)
@@ -242,23 +195,33 @@ loop_start()
 time.sleep(1)
 
 idx = 0
+phase = 0
 running = True
 while running:
     print('####################')
-    brokers[0].publish('vanetza/in/cam', str(createCam(1)))
-    brokers[1].publish('vanetza/in/cam', str(createCam(2)))
-    brokers[2].publish('vanetza/in/cam', str(createCam(3)))
-    brokers[3].publish('vanetza/in/cam', str(createCam(4)))
-    brokers[4].publish('vanetza/in/cam', str(createCam(5)))
-    brokers[5].publish('vanetza/in/cam', str(createCam(6)))
-    if idx%5 == 0:
-        brokers[0].publish('vanetza/in/denm', str(createDenm(1,vehicle1.process_initial_cause_code())))
-        brokers[1].publish('vanetza/in/denm', str(createDenm(2,vehicle1.process_initial_cause_code())))
-        brokers[2].publish('vanetza/in/denm', str(createDenm(3,vehicle1.process_initial_cause_code())))
-        brokers[3].publish('vanetza/in/denm', str(createDenm(4,vehicle1.process_initial_cause_code())))
-        brokers[4].publish('vanetza/in/denm', str(createDenm(5,vehicle1.process_initial_cause_code())))
-        brokers[5].publish('vanetza/in/denm', str(createDenm(6,vehicle1.process_initial_cause_code())))
-        time.sleep(5)
+    brokers[0].publish('vanetza/in/cam', str(createCam(1,vehicle1.geo_point.latitude,vehicle1.geo_point.longitude)))
+    brokers[1].publish('vanetza/in/cam', str(createCam(2,vehicle2.geo_point.latitude,vehicle2.geo_point.longitude)))
+    brokers[2].publish('vanetza/in/cam', str(createCam(3,vehicle3.geo_point.latitude,vehicle3.geo_point.longitude)))
+    brokers[3].publish('vanetza/in/cam', str(createCam(4,vehicle4.geo_point.latitude,vehicle4.geo_point.longitude)))
+    brokers[4].publish('vanetza/in/cam', str(createCam(5,vehicle5.geo_point.latitude,vehicle5.geo_point.longitude)))
+    brokers[5].publish('vanetza/in/cam', str(createCam(6,vehicle6.geo_point.latitude,vehicle6.geo_point.longitude)))
+    #time.sleep(3)
+    update_geo_point()
+    print(vehicle1.vehicle_info())
+
+    if phase==0:
+        if idx%10 == 0:
+            brokers[0].publish('vanetza/in/denm', str(createDenm(1,vehicle1.process_initial_cause_code())))
+            brokers[1].publish('vanetza/in/denm', str(createDenm(2,vehicle2.process_initial_cause_code())))
+            brokers[2].publish('vanetza/in/denm', str(createDenm(3,vehicle3.process_initial_cause_code())))
+            brokers[3].publish('vanetza/in/denm', str(createDenm(4,vehicle4.process_initial_cause_code())))
+            brokers[4].publish('vanetza/in/denm', str(createDenm(5,vehicle5.process_initial_cause_code())))
+            brokers[5].publish('vanetza/in/denm', str(createDenm(6,vehicle6.process_initial_cause_code())))
+        phase=1
+    if(phase==1):
+        #print("MUDOU DE FASE")
+        #time.sleep(20)
+        pass
     idx = idx + 1
 
 loop_stop()
