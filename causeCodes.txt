@@ -26,6 +26,8 @@ causeCode:
 7 - veículo troca de fila da esqueda para o meio
 8 - veículo sai na saída pretendida
 
+subCauseCode:
+# - posição do veículo
 
 cpm - para detetar em que fila o veículo está
 

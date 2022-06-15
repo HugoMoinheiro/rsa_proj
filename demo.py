@@ -73,15 +73,13 @@ def createDenm(id,causeCode):
     "situation": {
         "informationQuality": 7,
         "eventType": {
-            "causeCode": '''+str(causeCode)+''',
-            "subCauseCode": 14
+            "causeCode": '''+str(causeCode[0])+''',
+            "subCauseCode": '''+str(causeCode[1])+'''
         }
     }
 }'''
 
-row_ls = [1,1,2,2,3,3] #1 -> right, 2 -> middle, 3 -> left
 exit_ls = [1,2,3,random.randint(1, 3),random.randint(1, 3),random.randint(1, 3)]
-random.shuffle(row_ls)
 random.shuffle(initial_coords)
 random.shuffle(exit_ls)
 vehicle1 = Vehicle(1, exit_ls.pop(),initial_coords.pop())
@@ -102,6 +100,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe('vanetza/out/cam')
     client.subscribe('vanetza/out/denm')
 
+#lists to store other obu's coordinates and then calculate my position on the road
 ls1=[]
 ls2=[]
 ls3=[]
@@ -118,8 +117,10 @@ def on_message1(client, userdata, msg):
             ls1.append((message['latitude'],message['longitude']))
         else:
             vehicle1.get_position(ls1)
+            ls1.clear()
         #print('OBU1: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
+        print(message)
         pass
         # print('OBU1: ' + 'DENM' + ' from OBU' + str(message['stationID']))
         # print(message['fields']['denm']['situation']['eventType']['causeCode'])
@@ -132,6 +133,7 @@ def on_message2(client, userdata, msg):
             ls2.append((message['latitude'],message['longitude']))
         else:
             vehicle2.get_position(ls2)
+            ls2.clear()
         # print('OBU2: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
         pass
@@ -144,6 +146,7 @@ def on_message3(client, userdata, msg):
             ls3.append((message['latitude'],message['longitude']))
         else:
             vehicle3.get_position(ls3)
+            ls3.clear()
         # print('OBU3: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
         pass
@@ -156,6 +159,7 @@ def on_message4(client, userdata, msg):
             ls4.append((message['latitude'],message['longitude']))
         else:
             vehicle4.get_position(ls4)
+            ls4.clear()
         # print('OBU4: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
         pass
@@ -168,6 +172,7 @@ def on_message5(client, userdata, msg):
             ls5.append((message['latitude'],message['longitude']))
         else:
             vehicle5.get_position(ls5)
+            ls5.clear()
         # print('OBU5: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
         pass
@@ -180,6 +185,7 @@ def on_message6(client, userdata, msg):
             ls6.append((message['latitude'],message['longitude']))
         else:
             vehicle6.get_position(ls6)
+            ls6.clear()
         # print('OBU6: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
         pass
@@ -226,19 +232,18 @@ idx = 0
 phase = 0
 running = True
 while running:
-    print('####################')
+    print('####################' + str(idx))
     brokers[0].publish('vanetza/in/cam', str(createCam(1,vehicle1.geo_point.latitude,vehicle1.geo_point.longitude,vehicle1.speed)))
     brokers[1].publish('vanetza/in/cam', str(createCam(2,vehicle2.geo_point.latitude,vehicle2.geo_point.longitude,vehicle2.speed)))
     brokers[2].publish('vanetza/in/cam', str(createCam(3,vehicle3.geo_point.latitude,vehicle3.geo_point.longitude,vehicle3.speed)))
     brokers[3].publish('vanetza/in/cam', str(createCam(4,vehicle4.geo_point.latitude,vehicle4.geo_point.longitude,vehicle4.speed)))
     brokers[4].publish('vanetza/in/cam', str(createCam(5,vehicle5.geo_point.latitude,vehicle5.geo_point.longitude,vehicle5.speed)))
     brokers[5].publish('vanetza/in/cam', str(createCam(6,vehicle6.geo_point.latitude,vehicle6.geo_point.longitude,vehicle6.speed)))
-    #time.sleep(3)
     #print(vehicle1.vehicle_info())
     update_geo_point()
     #print(vehicle1.vehicle_info())
     
-    if phase==0:
+    if phase==0 and idx != 0:
         if idx%10 == 0:
             brokers[0].publish('vanetza/in/denm', str(createDenm(1,vehicle1.process_initial_cause_code())))
             brokers[1].publish('vanetza/in/denm', str(createDenm(2,vehicle2.process_initial_cause_code())))
@@ -246,12 +251,12 @@ while running:
             brokers[3].publish('vanetza/in/denm', str(createDenm(4,vehicle4.process_initial_cause_code())))
             brokers[4].publish('vanetza/in/denm', str(createDenm(5,vehicle5.process_initial_cause_code())))
             brokers[5].publish('vanetza/in/denm', str(createDenm(6,vehicle6.process_initial_cause_code())))
-        phase=1
+            phase=1
     if(phase==1):
         #print("MUDOU DE FASE")
         #time.sleep(20)
         pass
     idx = idx + 1
-    time.sleep(0.5)
+    time.sleep(1)
 
 loop_stop()
