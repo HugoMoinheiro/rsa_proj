@@ -81,3 +81,67 @@ class Vehicle:
         else:
             return -1
 
+    def decide(self, obu_stats):
+        tuple=(0,0)
+        found_car = False
+        if self.exit == 1 and (self.my_pos==3 or self.my_pos==6):
+            tuple=(1,7)
+            print("Vehicle " + str(self.id) + " is already on the right lane (corret position)")
+        elif self.exit == 2 and (self.my_pos==2 or self.my_pos==5):
+            tuple=(1,7)
+            print("Vehicle " + str(self.id) + " is already on the middle lane (corret position)")
+        elif self.exit == 3 and (self.my_pos==1 or self.my_pos==4):
+            tuple=(1,7)
+            print("Vehicle " + str(self.id) + " is already on the left lane (corret position)")
+        else:
+            if self.exit == 1 and (self.my_pos==2 or self.my_pos==5): #saída direita e encontras-te no meio
+                for i in obu_stats:
+                    if (i[1]==3 or i[1]==6) and (i[0] == 3 or i[0] == 2):
+                        tuple=(4,i[1])
+                        found_car=True
+                if not found_car:
+                    tuple=(4,7)
+                print("Vehicle " + str(self.id) + " wants to move 1 position to the right")
+            elif self.exit == 1 and (self.my_pos==1 or self.my_pos==4): #saída direita e encontras-te na esquerda
+                for i in obu_stats:
+                    if (i[1]==2 or i[1]==5) and i[0] == 3:
+                        tuple=(5,i[1])
+                        found_car=True
+                if not found_car:
+                    tuple=(5,7)
+                print("Vehicle " + str(self.id) + " wants to move 2 positions to the right")
+            elif self.exit == 2 and (self.my_pos==3 or self.my_pos==6): #saída meio e encontras-te na diretia
+                for i in obu_stats:
+                    if (i[1]==2 or i[1]==5) and i[0] == 1:
+                        tuple=(2,i[1])
+                        found_car=True
+                if not found_car:
+                    tuple=(2,7)
+                print("Vehicle " + str(self.id) + " wants to move 1 position to the left")
+            elif self.exit == 2 and (self.my_pos==1 or self.my_pos==4): #saída meio e encontras-te na esquerda
+                for i in obu_stats:
+                    if (i[1]==2 or i[1]==5) and i[0] == 3:
+                        tuple=(4,i[1])
+                        found_car=True
+                if not found_car:
+                    tuple=(4,7)
+                print("Vehicle " + str(self.id) + " wants to move 1 positions to the right")
+            elif self.exit == 3 and (self.my_pos==3 or self.my_pos==6): #saída esquerda e encontras-te na direita
+                for i in obu_stats:
+                    if (i[1]==2 or i[1]==5) and i[0] == 1:
+                        tuple=(3,i[1])
+                        found_car=True
+                if not found_car:
+                    tuple=(3,7)
+                print("Vehicle " + str(self.id) + " wants to move 2 position to the left")
+            elif self.exit == 3 and (self.my_pos==2 or self.my_pos==5): #saída esquerda e encontras-te no meio
+                for i in obu_stats:
+                    if (i[1]==1 or i[1]==4) and (i[0] == 2 or i[1] == 1):
+                        tuple=(2,i[1])
+                        found_car=True
+                if not found_car:
+                    tuple=(2,7)
+                print("Vehicle " + str(self.id) + " wants to move 1 positions to the left")
+        lst = list(tuple)
+
+        return lst

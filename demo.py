@@ -9,7 +9,7 @@ from vehicle import Vehicle
 brokers = []
 
 initial_coords = [[41.198193, -8.627468, 4], [41.198187, -8.627429, 5], [41.198183, -8.627389, 6], [41.198290, -8.627454, 1], [41.198287, -8.627414, 2], [41.198282, -8.627371, 3]]
-
+phase = 0
 def createCam(id, latitude, longitude,speed):
     return '''{
     "accEngaged": true,
@@ -107,6 +107,19 @@ ls3=[]
 ls4=[]
 ls5=[]
 ls6=[]
+ls1_denm=[]
+ls2_denm=[]
+ls3_denm=[]
+ls4_denm=[]
+ls5_denm=[]
+ls6_denm=[]
+
+list1=[]
+list2=[]
+list3=[]
+list4=[]
+list5=[]
+list6=[]
 
 def on_message1(client, userdata, msg):
     message = json.loads(msg.payload)
@@ -120,8 +133,11 @@ def on_message1(client, userdata, msg):
             ls1.clear()
         #print('OBU1: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
-        print(message)
-        pass
+        if len(ls1_denm) < 5:
+            ls1_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+        if len(ls1_denm) == 5:
+            list1.append(vehicle1.decide(ls1_denm))
+        
         # print('OBU1: ' + 'DENM' + ' from OBU' + str(message['stationID']))
         # print(message['fields']['denm']['situation']['eventType']['causeCode'])
         # print(message['fields']['denm']['management']['eventPosition']['longitude'])
@@ -136,7 +152,10 @@ def on_message2(client, userdata, msg):
             ls2.clear()
         # print('OBU2: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
-        pass
+        if len(ls2_denm) < 5:
+            ls2_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+        if len(ls2_denm) == 5:
+            list2.append(vehicle2.decide(ls2_denm))
         # print('OBU2: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message3(client, userdata, msg):
@@ -149,7 +168,10 @@ def on_message3(client, userdata, msg):
             ls3.clear()
         # print('OBU3: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
-        pass
+        if len(ls3_denm) < 5:
+            ls3_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+        if len(ls3_denm) == 5:
+            list3.append(vehicle3.decide(ls3_denm))
         # print('OBU3: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message4(client, userdata, msg):
@@ -162,7 +184,10 @@ def on_message4(client, userdata, msg):
             ls4.clear()
         # print('OBU4: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
-        pass
+        if len(ls4_denm) < 5:
+            ls4_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+        if len(ls4_denm) == 5:
+            list4.append(vehicle4.decide(ls4_denm))
         # print('OBU4: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message5(client, userdata, msg):
@@ -175,7 +200,10 @@ def on_message5(client, userdata, msg):
             ls5.clear()
         # print('OBU5: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
-        pass
+        if len(ls5_denm) < 5:
+            ls5_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+        if len(ls5_denm) == 5:
+            list5.append(vehicle5.decide(ls5_denm))
         # print('OBU5: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def on_message6(client, userdata, msg):
@@ -188,7 +216,10 @@ def on_message6(client, userdata, msg):
             ls6.clear()
         # print('OBU6: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
-        pass
+        if len(ls6_denm) < 5:
+            ls6_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+        if len(ls6_denm) == 5:
+            list6.append(vehicle6.decide(ls6_denm))
         # print('OBU6: ' + 'DENM' + ' from OBU' + str(message['stationID']))
 
 def loop_start():
@@ -229,7 +260,7 @@ loop_start()
 time.sleep(1)
 
 idx = 0
-phase = 0
+
 running = True
 while running:
     print('####################' + str(idx))
@@ -252,7 +283,14 @@ while running:
             brokers[4].publish('vanetza/in/denm', str(createDenm(5,vehicle5.process_initial_cause_code())))
             brokers[5].publish('vanetza/in/denm', str(createDenm(6,vehicle6.process_initial_cause_code())))
             phase=1
-    if(phase==1):
+    elif(phase==1):
+        print(list1)
+        print(list2)
+        print(list3)
+        print(list4)
+        print(list5)
+        print(list6)
+        
         #print("MUDOU DE FASE")
         #time.sleep(20)
         pass

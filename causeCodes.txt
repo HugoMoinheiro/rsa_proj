@@ -1,33 +1,32 @@
-causeCodes:
-1 - encontra-se na fila da direita e sai na primeira saída
-2 - encontra-se na fila da direita e sai na segunda saída
-3 - encontra-se na fila da direita e sai na terceira saída
-4 - encontra-se na fila do meio e sai na primeira saída
-5 - encontra-se na fila do meio e sai na segunda saída
-6 - encontra-se na fila do meio e sai na terceira saída
-7 - encontra-se na fila da esquerda e sai na primeira saída
-8 - encontra-se na fila da esquerda e sai na segunda saída
-9 - encontra-se na fila da esquerda e sai na terceira saída
-10 - troca de veículo na fila da esquerda com veículo na fila do meio
-11 - troca de veículo na fila da direita com veículo na fila do meio
-12 - veículo troca de fila do meio para a direita
-13 - veículo troca de fila da esqueda para o meio
-14 - veículo sai na saída pretendida
-
+1ª troca de mensagens denm
 
 causeCode:
 1 - sai na primeira saída
 2 - sai na segunda saída
 3 - sai na terceira saída
 
-4 - troca de veículo na fila da esquerda com veículo na fila do meio
-5 - troca de veículo na fila da direita com veículo na fila do meio
-6 - veículo troca de fila do meio para a direita
-7 - veículo troca de fila da esqueda para o meio
-8 - veículo sai na saída pretendida
-
 subCauseCode:
 # - posição do veículo
+
+2ª troca de mensagens denm
+
+causeCode
+1 - veículo na posição correta
+2 - veículo pretende ir para a esquerda 1 vez
+3 - veículo pretende ir para a esquerda 2 vezes
+4 - veículo pretende ir para a direita 1 vez
+5 - veículo pretende ir para a direita 2 vezes
+
+subCauseCode:
+# - posição do veículo de troca
+7 - caso não haja veículo para trocar
+
+
+
+8 - veículo sai na saída pretendida
+
+
+
 
 cpm - para detetar em que fila o veículo está
 
