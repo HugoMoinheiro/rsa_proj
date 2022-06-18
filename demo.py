@@ -6,9 +6,22 @@ import geopy
 import geopy.distance
 from vehicle import Vehicle
 
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
 brokers = []
 
-initial_coords = [[41.198193, -8.627468, 4], [41.198187, -8.627429, 5], [41.198183, -8.627389, 6], [41.198290, -8.627454, 1], [41.198287, -8.627414, 2], [41.198282, -8.627371, 3]]
+initial_coords = [[41.198193, -8.627454, 4], [41.198187, -8.627414, 5], [41.198183, -8.627371, 6], [41.198290, -8.627454, 1], [41.198287, -8.627414, 2], [41.198282, -8.627371, 3]]
 phase = 0
 def createCam(id, latitude, longitude,speed):
     return '''{
@@ -88,6 +101,7 @@ vehicle3 = Vehicle(3, exit_ls.pop(),initial_coords.pop())
 vehicle4 = Vehicle(4, exit_ls.pop(),initial_coords.pop())
 vehicle5 = Vehicle(5, exit_ls.pop(),initial_coords.pop())
 vehicle6 = Vehicle(6, exit_ls.pop(),initial_coords.pop())
+vehicle_list=[vehicle1,vehicle2,vehicle3,vehicle4,vehicle5,vehicle6]
 print(vehicle1.vehicle_info())
 print(vehicle2.vehicle_info())
 print(vehicle3.vehicle_info())
@@ -114,7 +128,7 @@ ls4_denm=[]
 ls5_denm=[]
 ls6_denm=[]
 
-list1=[]
+list1=[] #first value 
 list2=[]
 list3=[]
 list4=[]
@@ -133,10 +147,16 @@ def on_message1(client, userdata, msg):
             ls1.clear()
         #print('OBU1: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
-        if len(ls1_denm) < 5:
-            ls1_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
-        if len(ls1_denm) == 5:
-            list1.append(vehicle1.decide(ls1_denm))
+        if phase==1:
+            if len(ls1_denm) < 5:
+                ls1_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+            if len(ls1_denm) == 5:
+                list1.append(vehicle1.decide(ls1_denm))
+        elif phase==2:
+            subCause = message['fields']['denm']['situation']['eventType']['causeCode']
+            if vehicle1.my_pos==subCause:
+                print("I'm vehicle 1 and some vehcile wants to trade position with me")
+            vehicle1.update_geo_point_lane(list1[0])
         
         # print('OBU1: ' + 'DENM' + ' from OBU' + str(message['stationID']))
         # print(message['fields']['denm']['situation']['eventType']['causeCode'])
@@ -152,11 +172,17 @@ def on_message2(client, userdata, msg):
             ls2.clear()
         # print('OBU2: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
-        if len(ls2_denm) < 5:
-            ls2_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
-        if len(ls2_denm) == 5:
-            list2.append(vehicle2.decide(ls2_denm))
-        # print('OBU2: ' + 'DENM' + ' from OBU' + str(message['stationID']))
+        if phase==1:
+            if len(ls2_denm) < 5:
+                ls2_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+            if len(ls2_denm) == 5:
+                list2.append(vehicle2.decide(ls2_denm))
+            # print('OBU2: ' + 'DENM' + ' from OBU' + str(message['stationID']))
+        elif phase==2:
+            subCause = message['fields']['denm']['situation']['eventType']['causeCode']
+            if vehicle2.my_pos==subCause:
+                print("I'm vehicle 2 and some vehcile wants to trade position with me")
+            vehicle2.update_geo_point_lane(list2[0])
 
 def on_message3(client, userdata, msg):
     message = json.loads(msg.payload)
@@ -168,11 +194,17 @@ def on_message3(client, userdata, msg):
             ls3.clear()
         # print('OBU3: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
-        if len(ls3_denm) < 5:
-            ls3_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
-        if len(ls3_denm) == 5:
-            list3.append(vehicle3.decide(ls3_denm))
-        # print('OBU3: ' + 'DENM' + ' from OBU' + str(message['stationID']))
+        if phase==1:
+            if len(ls3_denm) < 5:
+                ls3_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+            if len(ls3_denm) == 5:
+                list3.append(vehicle3.decide(ls3_denm))
+            # print('OBU3: ' + 'DENM' + ' from OBU' + str(message['stationID']))
+        elif phase==2:
+            subCause = message['fields']['denm']['situation']['eventType']['causeCode']
+            if vehicle3.my_pos==subCause:
+                print("I'm vehicle 3 and some vehcile wants to trade position with me")
+            vehicle3.update_geo_point_lane(list3[0])
 
 def on_message4(client, userdata, msg):
     message = json.loads(msg.payload)
@@ -184,11 +216,17 @@ def on_message4(client, userdata, msg):
             ls4.clear()
         # print('OBU4: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
-        if len(ls4_denm) < 5:
-            ls4_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
-        if len(ls4_denm) == 5:
-            list4.append(vehicle4.decide(ls4_denm))
-        # print('OBU4: ' + 'DENM' + ' from OBU' + str(message['stationID']))
+        if phase==1:
+            if len(ls4_denm) < 5:
+                ls4_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+            if len(ls4_denm) == 5:
+                list4.append(vehicle4.decide(ls4_denm))
+            # print('OBU4: ' + 'DENM' + ' from OBU' + str(message['stationID']))
+        elif phase==2:
+            subCause = message['fields']['denm']['situation']['eventType']['causeCode']
+            if vehicle4.my_pos==subCause:
+                print("I'm vehicle 4 and some vehcile wants to trade position with me")
+            vehicle4.update_geo_point_lane(list4[0])
 
 def on_message5(client, userdata, msg):
     message = json.loads(msg.payload)
@@ -200,11 +238,17 @@ def on_message5(client, userdata, msg):
             ls5.clear()
         # print('OBU5: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
-        if len(ls5_denm) < 5:
-            ls5_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
-        if len(ls5_denm) == 5:
-            list5.append(vehicle5.decide(ls5_denm))
-        # print('OBU5: ' + 'DENM' + ' from OBU' + str(message['stationID']))
+        if phase==1:
+            if len(ls5_denm) < 5:
+                ls5_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+            if len(ls5_denm) == 5:
+                list5.append(vehicle5.decide(ls5_denm))
+            # print('OBU5: ' + 'DENM' + ' from OBU' + str(message['stationID']))
+        elif phase==2:
+            subCause = message['fields']['denm']['situation']['eventType']['causeCode']
+            if vehicle5.my_pos==subCause:
+                print("I'm vehicle 5 and some vehcile wants to trade position with me")
+            vehicle5.update_geo_point_lane(list5[0])
 
 def on_message6(client, userdata, msg):
     message = json.loads(msg.payload)
@@ -216,11 +260,60 @@ def on_message6(client, userdata, msg):
             ls6.clear()
         # print('OBU6: ' + 'CAM ' ' from OBU' + str(message['stationID']))
     elif msg.topic == 'vanetza/out/denm':
-        if len(ls6_denm) < 5:
-            ls6_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
-        if len(ls6_denm) == 5:
-            list6.append(vehicle6.decide(ls6_denm))
-        # print('OBU6: ' + 'DENM' + ' from OBU' + str(message['stationID']))
+        if phase==1:
+            if len(ls6_denm) < 5:
+                ls6_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+            if len(ls6_denm) == 5:
+                list6.append(vehicle6.decide(ls6_denm))
+            # print('OBU6: ' + 'DENM' + ' from OBU' + str(message['stationID']))
+        elif phase==2:
+            subCause = message['fields']['denm']['situation']['eventType']['causeCode']
+            if vehicle6.my_pos==subCause:
+                print("I'm vehicle 6 and some vehcile wants to trade position with me")
+            vehicle6.update_geo_point_lane(list6[0])
+
+def print_road():
+    estrada = "| Vehicle "
+    for i in vehicle_list:
+        if i.my_pos==1:
+            estrada = estrada + str(i.id) + " - Vehicle "
+    for i in vehicle_list:
+        if i.my_pos==2:
+            estrada = estrada + str(i.id) + " - Vehicle "
+    for i in vehicle_list:
+        if i.my_pos==3:
+            estrada = estrada + str(i.id) + " |\n| Vehicle " 
+    for i in vehicle_list:
+        if i.my_pos==4:
+            estrada = estrada + str(i.id) + " - Vehicle " 
+    for i in vehicle_list:
+        if i.my_pos==5:
+            estrada = estrada + str(i.id) + " - Vehicle " 
+    for i in vehicle_list:
+        if i.my_pos==6:
+            estrada = estrada + str(i.id) + " |" 
+    print(bcolors.WARNING + estrada + bcolors.ENDC)
+
+def print_lane():
+    fila="-----------------------\n3rd lane"
+    for i in vehicle_list:
+        if i.lane==3:
+            fila = fila + " Vehicle " + str(i.id)
+    
+    fila=fila+"\n-----------------------\n2nd lane:"
+
+    for i in vehicle_list:
+        if i.lane==2:
+            fila = fila + " Vehicle " + str(i.id)
+    
+    fila=fila+"\n-----------------------\n1st lane:"
+
+    for i in vehicle_list:
+        if i.lane==1:
+            fila = fila + " Vehicle " + str(i.id)
+
+    print(bcolors.WARNING + fila + bcolors.ENDC)
+
 
 def loop_start():
     for broker in brokers:
@@ -273,24 +366,28 @@ while running:
     #print(vehicle1.vehicle_info())
     update_geo_point()
     #print(vehicle1.vehicle_info())
+    if idx>3:
+        print_lane()
     
     if phase==0 and idx != 0:
         if idx%10 == 0:
+            phase=1
             brokers[0].publish('vanetza/in/denm', str(createDenm(1,vehicle1.process_initial_cause_code())))
             brokers[1].publish('vanetza/in/denm', str(createDenm(2,vehicle2.process_initial_cause_code())))
             brokers[2].publish('vanetza/in/denm', str(createDenm(3,vehicle3.process_initial_cause_code())))
             brokers[3].publish('vanetza/in/denm', str(createDenm(4,vehicle4.process_initial_cause_code())))
             brokers[4].publish('vanetza/in/denm', str(createDenm(5,vehicle5.process_initial_cause_code())))
-            brokers[5].publish('vanetza/in/denm', str(createDenm(6,vehicle6.process_initial_cause_code())))
-            phase=1
-    elif(phase==1):
-        print(list1)
-        print(list2)
-        print(list3)
-        print(list4)
-        print(list5)
-        print(list6)
-        
+            brokers[5].publish('vanetza/in/denm', str(createDenm(6,vehicle6.process_initial_cause_code())))  
+    elif(phase==1 and idx != 10):
+        if idx%2 == 0:
+            phase=2
+            brokers[0].publish('vanetza/in/denm', str(createDenm(1,list1[0])))
+            brokers[1].publish('vanetza/in/denm', str(createDenm(2,list2[0])))
+            brokers[2].publish('vanetza/in/denm', str(createDenm(3,list3[0])))
+            brokers[3].publish('vanetza/in/denm', str(createDenm(4,list4[0])))
+            brokers[4].publish('vanetza/in/denm', str(createDenm(5,list5[0])))
+            brokers[5].publish('vanetza/in/denm', str(createDenm(6,list6[0])))
+            
         #print("MUDOU DE FASE")
         #time.sleep(20)
         pass

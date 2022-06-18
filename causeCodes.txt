@@ -11,11 +11,11 @@ subCauseCode:
 2ª troca de mensagens denm
 
 causeCode
-1 - veículo na posição correta
-2 - veículo pretende ir para a esquerda 1 vez
-3 - veículo pretende ir para a esquerda 2 vezes
-4 - veículo pretende ir para a direita 1 vez
-5 - veículo pretende ir para a direita 2 vezes
+4 - veículo na posição correta
+5 - veículo pretende ir para a esquerda 1 vez
+6 - veículo pretende ir para a esquerda 2 vezes
+7 - veículo pretende ir para a direita 1 vez
+8 - veículo pretende ir para a direita 2 vezes
 
 subCauseCode:
 # - posição do veículo de troca
