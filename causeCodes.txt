@@ -23,7 +23,7 @@ subCauseCode:
 
 
 
-8 - veículo sai na saída pretendida
+9 - veículo sai na saída pretendida
 
 
 

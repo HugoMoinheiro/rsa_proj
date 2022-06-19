@@ -13,7 +13,12 @@ class Vehicle:
         self.knows_pos=0 #boolean to calculate position if unknown
         self.my_pos=0 # position identifier that was calculated
         self.adjust_lane=0 #to help change lane
-        self.lane=0
+        self.lane=0 #1st lane - left / 2nd lane - middle / 3rd lane - right
+        self.end=0
+    
+    def __str__(self):
+        s = "Vehicle " + str(self.id)
+        return s
 
     def vehicle_info(self):
         return f' Vehicle: {self.id}' + " / Exit: " + f'{self.exit}' + " / Speed: " + f'{self.speed}' + " / Position: " + f'{self.position_id}' + " / Latitude: " + f'{self.geo_point.latitude}' + " / Longitude: " + f'{self.geo_point.longitude}'
@@ -25,23 +30,26 @@ class Vehicle:
         self.speed=new_speed
 
     def update_geo_point(self):
-
-        if self.adjust_lane != 0:
-            kilometers_traveled_side = 14.4 / 3.6 / 1000 #gets the kilometers traveled in 1 second
-            d_side = geopy.distance.distance(kilometers=kilometers_traveled_side)
-            if self.adjust_lane > 0:
-                print("vehicle " + str(self.id) + " - " + str(self.adjust_lane))
-                self.geo_point = d_side.destination(point=self.geo_point, bearing=90) #bearing = 90 = east -> mover para a fila da direita
-                self.lane+=1
-                self.adjust_lane-=1
-            else:
-                print("vehicle " + str(self.id) + " - " + str(self.adjust_lane))
-                self.geo_point = d_side.destination(point=self.geo_point, bearing=-90) #bearing = -90 = west -> mover para a fila da esquerda
-                self.lane-=1
-                self.adjust_lane+=1
-        kilometers_traveled = self.speed / 3.6 / 1000 #gets the kilometers traveled in 1 second
-        d = geopy.distance.distance(kilometers=kilometers_traveled)
-        self.geo_point = d.destination(point=self.geo_point, bearing=0) #bearing = 0 = north
+        if self.end==0:
+            if self.adjust_lane != 0:
+                kilometers_traveled_side = 14.4 / 3.6 / 1000 #gets the kilometers traveled in 1 second
+                d_side = geopy.distance.distance(kilometers=kilometers_traveled_side)
+                if self.adjust_lane > 0:
+                    print("vehicle " + str(self.id) + " - " + str(self.adjust_lane))
+                    self.geo_point = d_side.destination(point=self.geo_point, bearing=90) #bearing = 90 = east -> mover para a fila da direita
+                    self.lane+=1
+                    self.adjust_lane-=1
+                else:
+                    print("vehicle " + str(self.id) + " - " + str(self.adjust_lane))
+                    self.geo_point = d_side.destination(point=self.geo_point, bearing=-90) #bearing = -90 = west -> mover para a fila da esquerda
+                    self.lane-=1
+                    self.adjust_lane+=1
+            
+            kilometers_traveled = self.speed / 3.6 / 1000 #gets the kilometers traveled in 1 second
+            d = geopy.distance.distance(kilometers=kilometers_traveled)
+            self.geo_point = d.destination(point=self.geo_point, bearing=0) #bearing = 0 = north
+            #if self.geo_point.latitude > 41.201222:
+            #    print("PASSOU A PRIMEIRA SAÍDA")
 
     # [41.198290, -8.6274/54, 1] [41.198287, -8.6274/14, 2] [41.198282, -8.6273/71, 3]
     # [41.198193, -8.6274/68, 4] [41.198187, -8.6274/29, 5] [41.198183, -8.6273/89, 6]
@@ -169,15 +177,29 @@ class Vehicle:
         return lst
 
     def update_geo_point_lane(self, causeCodes):
-        if self.knows_pos==1:
-            if causeCodes[0]==4:
-                pass
-            elif causeCodes[0]==5:
-                self.adjust_lane-=1
-            elif causeCodes[0]==6:
-                self.adjust_lane-=2
-            elif causeCodes[0]==7:
-                self.adjust_lane+=1
-            elif causeCodes[0]==8:
-                self.adjust_lane+=2
-            self.knows_pos=2
+        if self.end==0:
+            if self.knows_pos==1:
+                if causeCodes[0]==4:    #stay in the same position
+                    pass
+                elif causeCodes[0]==5:  #1 position to the left
+                    self.adjust_lane-=1
+                elif causeCodes[0]==6:  #2 positions to the left
+                    self.adjust_lane-=2
+                elif causeCodes[0]==7:  #1 position to the right
+                    self.adjust_lane+=1
+                elif causeCodes[0]==8:  #2 positions to the right
+                    self.adjust_lane+=2
+                self.knows_pos=2
+    
+    def update_lane_after_exit(self, knows_pos):
+        if self.end==0 and self.knows_pos==knows_pos:
+            self.knows_pos+=1
+            self.adjust_lane+=1
+            print("confirmado")
+
+    def passed_exit(self):
+        self.end=1
+        self.speed=0
+
+    def __del__(self):
+        print("deleted Vehicle")
