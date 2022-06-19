@@ -461,7 +461,7 @@ while running:
         #time.sleep(20)
     elif phase==4:
         for i in vehicle_list:
-            if i.exit==2 and i.geo_point.latitude>=41.220500:
+            if i.exit==3 and i.geo_point.latitude>=41.220500:
                 print("Veículo " + str(i.id) + " sai na terceira saída")
                 brokers[i.id-1].publish('vanetza/in/denm', str(createDenm(i.id,[9,7])))
                 vehicle_list.remove(i)
