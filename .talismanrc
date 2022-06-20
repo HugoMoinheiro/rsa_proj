@@ -1,0 +1,10 @@
+fileignoreconfig:
+- filename: webproj/.idea/workspace.xml
+  checksum: 771585f84c927273e5a02d2f66600ca80da31de624b6e9e9abb2011ecc783d5c
+- filename: webproj/app/old_views.py
+  checksum: 9ece10f7a7ebc1db58b8f62e7a95ed2859d43662715f06cb971fa30116061c93
+- filename: webproj/app/templates/index.html
+  checksum: d6c5a701e84ccabbb67ef0e9fab6294924845c29f6d6b27c07fa882fcf5b9ea0
+- filename: webproj/webproj/settings.py
+  checksum: 8019d88a7ee9238f1d5c6b31b276217367dfe34523443840e7d5e878b0635298
+version: "1.0"

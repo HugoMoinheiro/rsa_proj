@@ -1,0 +1,54 @@
+{{ title }}
+
+<div id="googleMap" style="width: 100%; height: 100%;"></div>
+
+    <script th:inline="javascript">
+      
+
+let flights = [
+  {
+    "Latitude": 41.878003, 
+    "Longitude": -87.654560
+  },
+  {
+    "Latitude":41.198187, 
+    "Longitude":-8.627414,
+  },
+  {
+    "Latitude": 41.198183, 
+    "Longitude":-8.627371,
+  }
+]
+
+
+        function myMap() {
+            var mapProp= {
+                center:new google.maps.LatLng(41.878003, -87.654560),
+                zoom:18,
+            };
+            var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+            /*<![CDATA[*/
+
+            flights.forEach(flight =>{
+              new google.maps.Marker({position: new google.maps.LatLng(flight.Latitude, flight.Longitude), 
+                    icon: {
+                        url: '../static/images/car.png',
+                        scaledSize: new google.maps.Size(10, 10)
+                    }
+                }).setMap(map);
+            });
+                
+                
+                
+            /*[/]*/
+
+            /*]]>*/
+
+            
+            flightPath.setMap(map);
+
+        }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=&callback=myMap&libraries=&v=weekly"></script>
