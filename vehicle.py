@@ -26,8 +26,16 @@ class Vehicle:
     def process_initial_cause_code(self):
         return (self.exit,self.my_pos)
 
-    def update_speed(self, new_speed):
+    def set_speed(self, new_speed):
         self.speed=new_speed
+
+    def update_speed(self):
+        if self.lane == 1:
+            self.set_speed(60)
+        elif self.lane == 2:
+            self.set_speed(50)
+        elif self.lane  == 3:
+            self.set_speed(40)
 
     def update_geo_point(self):
         if self.end==0:
