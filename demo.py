@@ -6,7 +6,6 @@ import geopy
 import geopy.distance
 from vehicle import Vehicle
 
-
 class bcolors: #nicer prints
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -418,10 +417,17 @@ time.sleep(1)
 
 idx = 0
 counter=0
-
+def update_file():
+    f = open("webproj/app/vehicle_coords.txt", "w")
+    s=""
+    for i in vehicle_list:
+        s = s +str(i.id) + " " + str(i.geo_point.latitude) + " " + str(i.geo_point.longitude) + "\n"
+    f.write(s)
+    f.close()
 running = True
 while running:
     print('####################' + str(idx))
+    update_file()
     brokers[0].publish('vanetza/in/cam', str(createCam(1,vehicle1.geo_point.latitude,vehicle1.geo_point.longitude,vehicle1.speed)))
     brokers[1].publish('vanetza/in/cam', str(createCam(2,vehicle2.geo_point.latitude,vehicle2.geo_point.longitude,vehicle2.speed)))
     brokers[2].publish('vanetza/in/cam', str(createCam(3,vehicle3.geo_point.latitude,vehicle3.geo_point.longitude,vehicle3.speed)))
@@ -464,7 +470,6 @@ while running:
             if i.geo_point.latitude>=41.201422:
                 phase=3
     elif phase==3:
-        print("ENTRA")
         for i in vehicle_list:
             if i.exit==2 and i.geo_point.latitude>=41.206052:
                 vehicle_exiting=2
