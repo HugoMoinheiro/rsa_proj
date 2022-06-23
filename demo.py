@@ -19,7 +19,24 @@ class bcolors: #nicer prints
 
 brokers = []
 
-initial_coords = [[41.198193, -8.627454, 4], [41.198187, -8.627414, 5], [41.198183, -8.627371, 6], [41.198290, -8.627454, 1], [41.198287, -8.627414, 2], [41.198282, -8.627371, 3]]
+# initial_coords = [[41.198193, -8.627454, 4],
+#                   [41.198187, -8.627414, 5],
+#                   [41.198183, -8.627371, 6], 
+#                   [41.198290, -8.627454, 1], 
+#                   [41.198287, -8.627414, 2], 
+#                   [41.198282, -8.627371, 3]]
+
+initial_coords = [[38.017080, -99.314110, 4],
+                  [38.017080, -99.314100, 5],
+                  [38.017080, -99.314090, 6], 
+                  [38.017070, -99.314110, 1], 
+                  [38.017070, -99.314100, 2], 
+                  [38.017070, -99.314090, 3]]
+
+exit1coord = [38.020000, -99.314080]
+exit2coord = [38.022000, -99.314080]
+exit3coord = [38.024000, -99.314080]
+
 phase = 0 #to control the timeline of the event
 vehicle_exiting=0
 
@@ -101,7 +118,8 @@ vehicle3 = Vehicle(3, exit_ls.pop(),initial_coords.pop())
 vehicle4 = Vehicle(4, exit_ls.pop(),initial_coords.pop())
 vehicle5 = Vehicle(5, exit_ls.pop(),initial_coords.pop())
 vehicle6 = Vehicle(6, exit_ls.pop(),initial_coords.pop())
-vehicle_list=[vehicle1,vehicle2,vehicle3,vehicle4,vehicle5,vehicle6]
+center = Vehicle(7, 3, [38.017080, -99.314100, 7])
+vehicle_list=[vehicle1,vehicle2,vehicle3,vehicle4,vehicle5,vehicle6,center]
 
 def print_vehicle_list(): #easier way to see the vehicles in the list
     s="["
@@ -166,15 +184,15 @@ def on_message1(client, userdata, msg):
             if vehicle1.my_pos==subCause:
                 print("I'm vehicle 1 and some vehcile wants to trade position with me")
             vehicle1.update_geo_point_lane(list1[0])
-            #vehicle1.update_speed()
+            # vehicle1.update_speed()
         if vehicle_exiting==1:
             if vehicle1.end==0 and vehicle1.exit!=1:
                 vehicle1.update_lane_after_exit(2)
-                #vehicle1.update_speed()
+                # vehicle1.update_speed()
         if vehicle_exiting==2:
             if vehicle1.end==0 and vehicle1.exit!=1 and vehicle1.exit!=2:
                 vehicle1.update_lane_after_exit(3)
-                #vehicle1.update_speed()
+                # vehicle1.update_speed()
         
         # print('OBU1: ' + 'DENM' + ' from OBU' + str(message['stationID']))
         # print(message['fields']['denm']['situation']['eventType']['causeCode'])
@@ -201,15 +219,15 @@ def on_message2(client, userdata, msg):
             if vehicle2.my_pos==subCause:
                 print("I'm vehicle 2 and some vehcile wants to trade position with me")
             vehicle2.update_geo_point_lane(list2[0])
-            #vehicle1.update_speed()
+            # vehicle1.update_speed()
         if vehicle_exiting==1:
             if vehicle2.end==0 and vehicle2.exit!=1:
                 vehicle2.update_lane_after_exit(2)
-                #vehicle1.update_speed()
+                # vehicle1.update_speed()
         if vehicle_exiting==2:
             if vehicle2.end==0 and vehicle2.exit!=1 and vehicle2.exit!=2:
                 vehicle2.update_lane_after_exit(3)
-                #vehicle1.update_speed()
+                # vehicle1.update_speed()
 
 def on_message3(client, userdata, msg):
     message = json.loads(msg.payload)
@@ -232,15 +250,15 @@ def on_message3(client, userdata, msg):
             if vehicle3.my_pos==subCause:
                 print("I'm vehicle 3 and some vehcile wants to trade position with me")
             vehicle3.update_geo_point_lane(list3[0])
-            #vehicle1.update_speed()
+            # vehicle1.update_speed()
         if vehicle_exiting==1:
             if vehicle3.end==0 and vehicle3.exit!=1:
                 vehicle3.update_lane_after_exit(2)
-                #vehicle1.update_speed()
+                # vehicle1.update_speed()
         if vehicle_exiting==2:
             if vehicle3.end==0 and vehicle3.exit!=1 and vehicle3.exit!=2:
                 vehicle3.update_lane_after_exit(3)
-                #vehicle1.update_speed()
+                # vehicle1.update_speed()
 
 def on_message4(client, userdata, msg):
     message = json.loads(msg.payload)
@@ -263,15 +281,15 @@ def on_message4(client, userdata, msg):
             if vehicle4.my_pos==subCause:
                 print("I'm vehicle 4 and some vehcile wants to trade position with me")
             vehicle4.update_geo_point_lane(list4[0])
-            #vehicle1.update_speed()
+            # vehicle1.update_speed()
         if vehicle_exiting==1:
             if vehicle4.end==0 and vehicle4.exit!=1:
                 vehicle4.update_lane_after_exit(2)
-                #vehicle1.update_speed()
+                # vehicle1.update_speed()
         if vehicle_exiting==2:
             if vehicle4.end==0 and vehicle4.exit!=1 and vehicle4.exit!=2:
                 vehicle4.update_lane_after_exit(3)
-                #vehicle1.update_speed()
+                # vehicle1.update_speed()
 
 def on_message5(client, userdata, msg):
     message = json.loads(msg.payload)
@@ -294,15 +312,15 @@ def on_message5(client, userdata, msg):
             if vehicle5.my_pos==subCause:
                 print("I'm vehicle 5 and some vehcile wants to trade position with me")
             vehicle5.update_geo_point_lane(list5[0])
-            #vehicle1.update_speed()
+            # vehicle1.update_speed()
         if vehicle_exiting==1:
             if vehicle5.end==0 and vehicle5.exit!=1:
                 vehicle5.update_lane_after_exit(2)
-                #vehicle1.update_speed()
+                # vehicle1.update_speed()
         if vehicle_exiting==2:
             if vehicle5.end==0 and vehicle5.exit!=1 and vehicle5.exit!=2:
                 vehicle5.update_lane_after_exit(3)
-                #vehicle1.update_speed()
+                # vehicle1.update_speed()
 
 def on_message6(client, userdata, msg):
     message = json.loads(msg.payload)
@@ -325,15 +343,15 @@ def on_message6(client, userdata, msg):
             if vehicle6.my_pos==subCause:
                 print("I'm vehicle 6 and some vehcile wants to trade position with me")
             vehicle6.update_geo_point_lane(list6[0])
-            #vehicle1.update_speed()
+            # vehicle1.update_speed()
         if vehicle_exiting==1:
             if vehicle6.end==0 and vehicle6.exit!=1:
                 vehicle6.update_lane_after_exit(2)
-                #vehicle1.update_speed()
+                # vehicle1.update_speed()
         if vehicle_exiting==2:
             if vehicle6.end==0 and vehicle6.exit!=1 and vehicle6.exit!=2:
                 vehicle6.update_lane_after_exit(3)
-                #vehicle1.update_speed()
+                # vehicle1.update_speed()
 
 def print_road():
     estrada = "| Vehicle "
@@ -393,6 +411,7 @@ def update_geo_point():
     vehicle4.update_geo_point()
     vehicle5.update_geo_point()
     vehicle6.update_geo_point()
+    center.update_geo_point()
 
 for i in range(1,7):
     obu_name = 'broker'+str(i)
@@ -460,37 +479,43 @@ while running:
             brokers[5].publish('vanetza/in/denm', str(createDenm(6,list6[0])))
     elif phase==2:
         for i in vehicle_list:
-            if i.exit==1 and i.geo_point.latitude>=41.201222:
+            # if i.exit==1 and i.geo_point.latitude>=41.201222:
+            if i.exit==1 and i.geo_point.latitude>=exit1coord[0]:
                 vehicle_exiting=1
                 print("Veículo " + str(i.id) + " sai na primeira saída")
                 brokers[i.id-1].publish('vanetza/in/denm', str(createDenm(i.id,[9,7])))
                 vehicle_list.remove(i)
                 print_vehicle_list()
                 i.passed_exit()
-            if i.geo_point.latitude>=41.201422:
+            # if i.geo_point.latitude>=41.201422:
+            if i.geo_point.latitude>=exit1coord[0]+0.0002:
                 phase=3
     elif phase==3:
         for i in vehicle_list:
-            if i.exit==2 and i.geo_point.latitude>=41.206052:
+            # if i.exit==2 and i.geo_point.latitude>=41.206052:
+            if i.exit==2 and i.geo_point.latitude>=exit2coord[0]:
                 vehicle_exiting=2
                 print("Veículo " + str(i.id) + " sai na segunda saída")
                 brokers[i.id-1].publish('vanetza/in/denm', str(createDenm(i.id,[9,7])))
                 vehicle_list.remove(i)
                 print_vehicle_list()
                 i.passed_exit()
-            if i.geo_point.latitude>=41.206252:
+            # if i.geo_point.latitude>=41.206252:
+            if i.geo_point.latitude>=exit2coord[0]+0.0002:
                 phase=4
         #print("MUDOU DE FASE")
         #time.sleep(20)
     elif phase==4:
         for i in vehicle_list:
-            if i.exit==3 and i.geo_point.latitude>=41.220500:
+            # if i.exit==3 and i.geo_point.latitude>=41.220500:
+            if i.exit==3 and i.geo_point.latitude>=exit3coord[0]:
                 print("Veículo " + str(i.id) + " sai na terceira saída")
                 brokers[i.id-1].publish('vanetza/in/denm', str(createDenm(i.id,[9,7])))
                 vehicle_list.remove(i)
                 print_vehicle_list()
                 i.passed_exit()
-            if i.geo_point.latitude>=41.206252:
+            # if i.geo_point.latitude>=41.206252:
+            if i.geo_point.latitude>=exit3coord[0]+0.0002:
                 phase=4
         
     idx = idx + 1

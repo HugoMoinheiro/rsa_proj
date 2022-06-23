@@ -1,11 +1,13 @@
 import geopy
 import geopy.distance
 
+INIT_SPEED = 30
+
 class Vehicle:
     def __init__(self, id, exit, coords):
         self.exit=exit #1 - first exit, 2 - second exit, 3 - third exit
         self.id=id 
-        self.speed=40 #km/h
+        self.speed=INIT_SPEED #km/h
         self.initial_coords=coords # initial latitude and longitude
         self.geo_point=geopy.Point(coords[0], coords[1]) # geo point to update the coordinates
         self.position_id=coords[2] # real position identifier
@@ -31,25 +33,28 @@ class Vehicle:
 
     def update_speed(self):
         if self.lane == 1:
-            self.set_speed(60)
+            self.set_speed(INIT_SPEED+10)
         elif self.lane == 2:
-            self.set_speed(50)
+            self.set_speed(INIT_SPEED+5)
         elif self.lane  == 3:
-            self.set_speed(40)
+            self.set_speed(INIT_SPEED)
 
     def update_geo_point(self):
         if self.end==0:
             if self.adjust_lane != 0:
                 kilometers_traveled_side = 14.4 / 3.6 / 1000 #gets the kilometers traveled in 1 second
+                kilometers_traveled_side = 0
                 d_side = geopy.distance.distance(kilometers=kilometers_traveled_side)
                 if self.adjust_lane > 0:
                     print("vehicle " + str(self.id) + " - " + str(self.adjust_lane))
                     self.geo_point = d_side.destination(point=self.geo_point, bearing=90) #bearing = 90 = east -> mover para a fila da direita
+                    # self.geo_point.longitude += 0.00001
                     self.lane+=1
                     self.adjust_lane-=1
                 else:
                     print("vehicle " + str(self.id) + " - " + str(self.adjust_lane))
                     self.geo_point = d_side.destination(point=self.geo_point, bearing=-90) #bearing = -90 = west -> mover para a fila da esquerda
+                    # self.geo_point.longitude -= 0.00001
                     self.lane-=1
                     self.adjust_lane+=1
             

@@ -20,7 +20,7 @@ def home(request):
 def get_coords(request):
     start = time.time()
 
-    car1_lat,car1_lon,car2_lat,car2_lon,car3_lat,car3_lon,car4_lat,car4_lon,car5_lat,car5_lon,car6_lat,car6_lon=[0]*12
+    car1_lat,car1_lon,car2_lat,car2_lon,car3_lat,car3_lon,car4_lat,car4_lon,car5_lat,car5_lon,car6_lat,car6_lon,center_lat,center_lng=[0]*14
     f = open(filepath, "r")
     for line in f:
         coords = line
@@ -45,6 +45,9 @@ def get_coords(request):
         elif x[0] == '6':
             car6_lat = float(x[1])
             car6_lon = float(x[2])
+        elif x[0] == '7':
+            center_lat = float(x[1])
+            center_lng = float(x[2])
 
     tparams = {
         'title': 'Platoon Merging',
@@ -61,6 +64,8 @@ def get_coords(request):
         'car5_lon':car5_lon,
         'car6_lat':car6_lat,
         'car6_lon':car6_lon,
+        'center_lat':center_lat,
+        'center_lng':center_lng
     }
     tparams = json.dumps(tparams)
     loaded_r = json.loads(tparams)

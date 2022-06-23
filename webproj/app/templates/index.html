@@ -8,42 +8,64 @@
       
 let car1 = 
   {
-    "Latitude": 41.198193, 
-    "Longitude": -8.627454 
+    "Latitude": 38.017080, 
+    "Longitude": -99.314110 
   }
 
 let car2 = 
   {
-    "Latitude": 41.198187, 
-    "Longitude": -8.627414 
+    "Latitude": 38.017080, 
+    "Longitude": -99.314100 
   }
 
 let car3 = 
   {
-    "Latitude": 41.198183, 
-    "Longitude": -8.627371 
+    "Latitude": 38.017080, 
+    "Longitude": -99.314090
   }
 
 let car4 = 
   {
-    "Latitude": 41.198290, 
-    "Longitude": -8.627454 
+    "Latitude": 38.017070, 
+    "Longitude": -99.314110
   }
 
 let car5 = 
   {
-    "Latitude": 41.198287, 
-    "Longitude": -8.627414 
+    "Latitude": 38.017070, 
+    "Longitude": -99.314100
   }
 
 let car6 = 
   {
-    "Latitude": 41.198282, 
-    "Longitude": -8.627371 
+    "Latitude": 38.017070, 
+    "Longitude": -99.314090
   }
 
-let mapProp= {center:new google.maps.LatLng(41.198193, -8.627414),zoom:18,};
+let exit1 = {
+  "Latitude": 38.020000, 
+  "Longitude": -99.314080 
+}
+
+let exit2 = {
+  "Latitude": 38.022000, 
+  "Longitude": -99.314080 
+}
+
+let exit3 = {
+  "Latitude": 38.024000, 
+  "Longitude": -99.314080 
+}
+
+let center = {
+  "Latitude": 38.017080, 
+  "Longitude": -99.314100 
+}
+
+// let mapProp= {center:new google.maps.LatLng(41.198193, -8.627414),zoom:18,};
+let mapProp= {center:new google.maps.LatLng(38.015075, -99.314105),zoom:18,};
 var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
 var car1marker = new google.maps.Marker({position: new google.maps.LatLng(car1.Latitude, car1.Longitude), 
     icon: {
         url: '../static/images/blue_car.png',
@@ -83,9 +105,35 @@ var car6marker = new google.maps.Marker({position: new google.maps.LatLng(car6.L
         scaledSize: new google.maps.Size(12, 12)
     }
 });
+
+var exit1marker = new google.maps.Marker({position: new google.maps.LatLng(exit1.Latitude, exit1.Longitude), 
+    icon: {
+        url: '../static/images/exit.png',
+        scaledSize: new google.maps.Size(12, 12)
+    }
+});
+
+var exit2marker = new google.maps.Marker({position: new google.maps.LatLng(exit2.Latitude, exit2.Longitude), 
+    icon: {
+        url: '../static/images/exit.png',
+        scaledSize: new google.maps.Size(12, 12)
+    }
+});
+
+var exit3marker = new google.maps.Marker({position: new google.maps.LatLng(exit3.Latitude, exit3.Longitude), 
+    icon: {
+        url: '../static/images/exit.png',
+        scaledSize: new google.maps.Size(12, 12)
+    }
+});
            
 
-
+exit1marker.setPosition(exit1.Latitude, exit1.Longitude);
+exit2marker.setPosition(exit2.Latitude, exit2.Longitude);
+exit3marker.setPosition(exit3.Latitude, exit3.Longitude);
+exit1marker.setMap(map);
+exit2marker.setMap(map);
+exit3marker.setMap(map);
 
 setInterval(updateMarker, 1000);
 
@@ -105,13 +153,17 @@ function updateMarker(){
     car5.Longitude=coordinates.car5_lon
     car6.Latitude=coordinates.car6_lat
     car6.Longitude=coordinates.car6_lon
+    center.Latitude=coordinates.center_lat
+    center.Longitude=coordinates.center_lng
   });
+
   myLatLng1=new google.maps.LatLng(car1.Latitude, car1.Longitude);
   myLatLng2=new google.maps.LatLng(car2.Latitude, car2.Longitude);
   myLatLng3=new google.maps.LatLng(car3.Latitude, car3.Longitude);
   myLatLng4=new google.maps.LatLng(car4.Latitude, car4.Longitude);
   myLatLng5=new google.maps.LatLng(car5.Latitude, car5.Longitude);
   myLatLng6=new google.maps.LatLng(car6.Latitude, car6.Longitude);
+  centerLatLng=new google.maps.LatLng(center.Latitude, center.Longitude);
   car1marker.setPosition(myLatLng1);
   car1marker.setMap(map);
   car2marker.setPosition(myLatLng2);
@@ -124,6 +176,9 @@ function updateMarker(){
   car5marker.setMap(map);
   car6marker.setPosition(myLatLng6);
   car6marker.setMap(map);
+
+  map.setCenter(centerLatLng);
+
 }
 
 </script>
