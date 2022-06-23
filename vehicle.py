@@ -33,28 +33,28 @@ class Vehicle:
 
     def update_speed(self):
         if self.lane == 1:
-            self.set_speed(INIT_SPEED+10)
+            self.set_speed(INIT_SPEED+1)
         elif self.lane == 2:
-            self.set_speed(INIT_SPEED+5)
+            self.set_speed(INIT_SPEED+0.5)
         elif self.lane  == 3:
             self.set_speed(INIT_SPEED)
 
     def update_geo_point(self):
         if self.end==0:
             if self.adjust_lane != 0:
-                kilometers_traveled_side = 14.4 / 3.6 / 1000 #gets the kilometers traveled in 1 second
-                kilometers_traveled_side = 0
-                d_side = geopy.distance.distance(kilometers=kilometers_traveled_side)
+                # kilometers_traveled_side = 0
+                # kilometers_traveled_side = 14.4 / 3.6 / 1000 #gets the kilometers traveled in 1 second
+                # d_side = geopy.distance.distance(kilometers=kilometers_traveled_side)
                 if self.adjust_lane > 0:
                     print("vehicle " + str(self.id) + " - " + str(self.adjust_lane))
-                    self.geo_point = d_side.destination(point=self.geo_point, bearing=90) #bearing = 90 = east -> mover para a fila da direita
-                    # self.geo_point.longitude += 0.00001
+                    # self.geo_point = d_side.destination(point=self.geo_point, bearing=90) #bearing = 90 = east -> mover para a fila da direita
+                    self.geo_point.longitude += 0.00001
                     self.lane+=1
                     self.adjust_lane-=1
                 else:
                     print("vehicle " + str(self.id) + " - " + str(self.adjust_lane))
-                    self.geo_point = d_side.destination(point=self.geo_point, bearing=-90) #bearing = -90 = west -> mover para a fila da esquerda
-                    # self.geo_point.longitude -= 0.00001
+                    # self.geo_point = d_side.destination(point=self.geo_point, bearing=-90) #bearing = -90 = west -> mover para a fila da esquerda
+                    self.geo_point.longitude -= 0.00001
                     self.lane-=1
                     self.adjust_lane+=1
             
