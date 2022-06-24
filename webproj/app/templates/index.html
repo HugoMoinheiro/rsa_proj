@@ -5,128 +5,128 @@
 <div id="googleMap" style="width: 100%; height: 100%;"></div>
 
     <script th:inline="javascript">
-      
-let car1 = 
-  {
-    "Latitude": 38.017080, 
-    "Longitude": -99.314110 
-  }
 
-let car2 = 
+let car1 =
   {
-    "Latitude": 38.017080, 
-    "Longitude": -99.314100 
-  }
-
-let car3 = 
-  {
-    "Latitude": 38.017080, 
-    "Longitude": -99.314090
-  }
-
-let car4 = 
-  {
-    "Latitude": 38.017070, 
+    "Latitude": 38.017080,
     "Longitude": -99.314110
   }
 
-let car5 = 
+let car2 =
   {
-    "Latitude": 38.017070, 
+    "Latitude": 38.017080,
     "Longitude": -99.314100
   }
 
-let car6 = 
+let car3 =
   {
-    "Latitude": 38.017070, 
+    "Latitude": 38.017080,
+    "Longitude": -99.314090
+  }
+
+let car4 =
+  {
+    "Latitude": 38.017070,
+    "Longitude": -99.314110
+  }
+
+let car5 =
+  {
+    "Latitude": 38.017070,
+    "Longitude": -99.314100
+  }
+
+let car6 =
+  {
+    "Latitude": 38.017070,
     "Longitude": -99.314090
   }
 
 let exit1 = {
-  "Latitude": 38.020000, 
-  "Longitude": -99.314080 
+  "Latitude": 38.020000,
+  "Longitude": -99.314080
 }
 
 let exit2 = {
-  "Latitude": 38.022000, 
-  "Longitude": -99.314080 
+  "Latitude": 38.022000,
+  "Longitude": -99.314080
 }
 
 let exit3 = {
-  "Latitude": 38.024000, 
-  "Longitude": -99.314080 
+  "Latitude": 38.024000,
+  "Longitude": -99.314080
 }
 
 let center = {
-  "Latitude": 38.017080, 
-  "Longitude": -99.314100 
+  "Latitude": 38.017080,
+  "Longitude": -99.314100
 }
 
 // let mapProp= {center:new google.maps.LatLng(41.198193, -8.627414),zoom:18,};
 let mapProp= {center:new google.maps.LatLng(38.015075, -99.314105),zoom:21,};
 var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
 
-var car1marker = new google.maps.Marker({position: new google.maps.LatLng(car1.Latitude, car1.Longitude), 
+var car1marker = new google.maps.Marker({position: new google.maps.LatLng(car1.Latitude, car1.Longitude),
     icon: {
         url: '../static/images/blue_car.png',
         scaledSize: new google.maps.Size(14, 14)
     }
 });
-var car2marker = new google.maps.Marker({position: new google.maps.LatLng(car2.Latitude, car2.Longitude), 
+var car2marker = new google.maps.Marker({position: new google.maps.LatLng(car2.Latitude, car2.Longitude),
     icon: {
         url: '../static/images/red_car.png',
         scaledSize: new google.maps.Size(14, 14)
     }
 });
-var car3marker = new google.maps.Marker({position: new google.maps.LatLng(car3.Latitude, car3.Longitude), 
+var car3marker = new google.maps.Marker({position: new google.maps.LatLng(car3.Latitude, car3.Longitude),
     icon: {
-        url: '../static/images/yellow_car.png',
+        url: '../static/images/black_car.png',
         scaledSize: new google.maps.Size(14, 14)
     }
 });
 
-var car4marker = new google.maps.Marker({position: new google.maps.LatLng(car4.Latitude, car4.Longitude), 
+var car4marker = new google.maps.Marker({position: new google.maps.LatLng(car4.Latitude, car4.Longitude),
     icon: {
         url: '../static/images/green_car.png',
         scaledSize: new google.maps.Size(14, 14)
     }
 });
 
-var car5marker = new google.maps.Marker({position: new google.maps.LatLng(car5.Latitude, car5.Longitude), 
+var car5marker = new google.maps.Marker({position: new google.maps.LatLng(car5.Latitude, car5.Longitude),
     icon: {
         url: '../static/images/pink_car.png',
         scaledSize: new google.maps.Size(14, 14)
     }
 });
 
-var car6marker = new google.maps.Marker({position: new google.maps.LatLng(car6.Latitude, car6.Longitude), 
+var car6marker = new google.maps.Marker({position: new google.maps.LatLng(car6.Latitude, car6.Longitude),
     icon: {
         url: '../static/images/grey_car.png',
         scaledSize: new google.maps.Size(14, 14)
     }
 });
 
-var exit1marker = new google.maps.Marker({position: new google.maps.LatLng(exit1.Latitude, exit1.Longitude), 
+var exit1marker = new google.maps.Marker({position: new google.maps.LatLng(exit1.Latitude, exit1.Longitude),
     icon: {
         url: '../static/images/exit.png',
         scaledSize: new google.maps.Size(14, 14)
     }
 });
 
-var exit2marker = new google.maps.Marker({position: new google.maps.LatLng(exit2.Latitude, exit2.Longitude), 
+var exit2marker = new google.maps.Marker({position: new google.maps.LatLng(exit2.Latitude, exit2.Longitude),
     icon: {
         url: '../static/images/exit.png',
         scaledSize: new google.maps.Size(14, 14)
     }
 });
 
-var exit3marker = new google.maps.Marker({position: new google.maps.LatLng(exit3.Latitude, exit3.Longitude), 
+var exit3marker = new google.maps.Marker({position: new google.maps.LatLng(exit3.Latitude, exit3.Longitude),
     icon: {
         url: '../static/images/exit.png',
         scaledSize: new google.maps.Size(14, 14)
     }
 });
-           
+
 
 exit1marker.setPosition(exit1.Latitude, exit1.Longitude);
 exit2marker.setPosition(exit2.Latitude, exit2.Longitude);
@@ -182,5 +182,3 @@ function updateMarker(){
 }
 
 </script>
-
-    
