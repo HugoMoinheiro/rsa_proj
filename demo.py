@@ -376,22 +376,22 @@ def print_road():
     print(bcolors.WARNING + estrada + bcolors.ENDC)
 
 def print_lane():
-    fila="-----------------------\n3rd lane"
+    fila="-----------------------\n3rd lane\n"
     for i in vehicle_list:
         if i.lane==3:
-            fila = fila + " Vehicle " + str(i.id) + " coord " + str(i.geo_point.latitude) + " " + str(i.geo_point.longitude) +  " "
+            fila = fila + " Vehicle " + str(i.id) + " coord " + str(i.geo_point.latitude) + " " + str(i.geo_point.longitude) +  " \n"
     
-    fila=fila+"\n-----------------------\n2nd lane:"
+    fila=fila+"\n-----------------------\n2nd lane\n"
 
     for i in vehicle_list:
         if i.lane==2:
-            fila = fila + " Vehicle " + str(i.id) + " coord " + str(i.geo_point.latitude) + " " + str(i.geo_point.longitude) +  " "
+            fila = fila + " Vehicle " + str(i.id) + " coord " + str(i.geo_point.latitude) + " " + str(i.geo_point.longitude) +  " \n"
     
-    fila=fila+"\n-----------------------\n1st lane:"
+    fila=fila+"\n-----------------------\n1st lane\n"
 
     for i in vehicle_list:
         if i.lane==1:
-            fila = fila + " Vehicle " + str(i.id) + " coord " + str(i.geo_point.latitude) + " " + str(i.geo_point.longitude) +  " "
+            fila = fila + " Vehicle " + str(i.id) + " coord " + str(i.geo_point.latitude) + " " + str(i.geo_point.longitude) +  " \n"
 
     print(bcolors.WARNING + fila + bcolors.ENDC)
 
