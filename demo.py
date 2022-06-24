@@ -523,13 +523,5 @@ while running:
         
     idx = idx + 1
     time.sleep(0.5)
-    print('~~~~~~~~~~~~~~~~~~~~')
-    print(vehicle1.speed)
-    print(vehicle2.speed)
-    print(vehicle3.speed)
-    print(vehicle4.speed)
-    print(vehicle5.speed)
-    print(vehicle6.speed)
-    print('~~~~~~~~~~~~~~~~~~~~')
 
 loop_stop()

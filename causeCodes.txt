@@ -1,29 +1,29 @@
 1ª troca de mensagens denm
 
 causeCode:
-1 - sai na primeira saída
-2 - sai na segunda saída
-3 - sai na terceira saída
+41 - sai na primeira saída
+42 - sai na segunda saída
+43 - sai na terceira saída
 
 subCauseCode:
-# - posição do veículo
+51-56 - posição do veículo
 
 2ª troca de mensagens denm
 
 causeCode
-4 - veículo na posição correta
-5 - veículo pretende ir para a esquerda 1 vez
-6 - veículo pretende ir para a esquerda 2 vezes
-7 - veículo pretende ir para a direita 1 vez
-8 - veículo pretende ir para a direita 2 vezes
+44 - veículo na posição correta
+45 - veículo pretende ir para a esquerda 1 vez
+46 - veículo pretende ir para a esquerda 2 vezes
+47 - veículo pretende ir para a direita 1 vez
+48 - veículo pretende ir para a direita 2 vezes
 
 subCauseCode:
-# - posição do veículo de troca
-7 - caso não haja veículo para trocar
+51-56 - posição do veículo de troca
+57 - caso não haja veículo para trocar
 
 
 
-9 - veículo sai na saída pretendida
+58 - veículo sai na saída pretendida
 
 
 
