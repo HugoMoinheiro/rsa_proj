@@ -135,7 +135,7 @@ exit1marker.setMap(map);
 exit2marker.setMap(map);
 exit3marker.setMap(map);
 
-setInterval(updateMarker, 1000);
+setInterval(updateMarker, 250);
 
 function updateMarker(){
   $.get('get_coords', {}, function (coordinates) {

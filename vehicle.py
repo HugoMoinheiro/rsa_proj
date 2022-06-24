@@ -26,7 +26,9 @@ class Vehicle:
         return f' Vehicle: {self.id}' + " / Exit: " + f'{self.exit}' + " / Speed: " + f'{self.speed}' + " / Position: " + f'{self.position_id}' + " / Latitude: " + f'{self.geo_point.latitude}' + " / Longitude: " + f'{self.geo_point.longitude}'
         
     def process_initial_cause_code(self):
-        return (self.exit,self.my_pos)
+        saida = self.exit + 40
+        posicao = self.my_pos + 50
+        return (saida,posicao)
 
     def set_speed(self, new_speed):
         self.speed=new_speed

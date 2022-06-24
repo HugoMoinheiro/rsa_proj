@@ -118,7 +118,7 @@ vehicle3 = Vehicle(3, exit_ls.pop(),initial_coords.pop())
 vehicle4 = Vehicle(4, exit_ls.pop(),initial_coords.pop())
 vehicle5 = Vehicle(5, exit_ls.pop(),initial_coords.pop())
 vehicle6 = Vehicle(6, exit_ls.pop(),initial_coords.pop())
-center = Vehicle(7, 3, [38.017080, -99.314100, 7])
+center = Vehicle(7, 4, [38.017080, -99.314100, 7])
 vehicle_list=[vehicle1,vehicle2,vehicle3,vehicle4,vehicle5,vehicle6,center]
 
 def print_vehicle_list(): #easier way to see the vehicles in the list
@@ -176,7 +176,7 @@ def on_message1(client, userdata, msg):
     elif msg.topic == 'vanetza/out/denm':
         if phase==1:
             if len(ls1_denm) < 5:
-                ls1_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+                ls1_denm.append((int(message['fields']['denm']['situation']['eventType']['causeCode'])-40,int(message['fields']['denm']['situation']['eventType']['subCauseCode'])-50))
             if len(ls1_denm) == 5:
                 list1.append(vehicle1.decide(ls1_denm))
         elif phase==2:
@@ -210,7 +210,7 @@ def on_message2(client, userdata, msg):
     elif msg.topic == 'vanetza/out/denm':
         if phase==1:
             if len(ls2_denm) < 5:
-                ls2_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+                ls2_denm.append((int(message['fields']['denm']['situation']['eventType']['causeCode'])-40,int(message['fields']['denm']['situation']['eventType']['subCauseCode'])-50))
             if len(ls2_denm) == 5:
                 list2.append(vehicle2.decide(ls2_denm))
             # print('OBU2: ' + 'DENM' + ' from OBU' + str(message['stationID']))
@@ -241,7 +241,7 @@ def on_message3(client, userdata, msg):
     elif msg.topic == 'vanetza/out/denm':
         if phase==1:
             if len(ls3_denm) < 5:
-                ls3_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+                ls3_denm.append((int(message['fields']['denm']['situation']['eventType']['causeCode'])-40,int(message['fields']['denm']['situation']['eventType']['subCauseCode'])-50))
             if len(ls3_denm) == 5:
                 list3.append(vehicle3.decide(ls3_denm))
             # print('OBU3: ' + 'DENM' + ' from OBU' + str(message['stationID']))
@@ -272,7 +272,7 @@ def on_message4(client, userdata, msg):
     elif msg.topic == 'vanetza/out/denm':
         if phase==1:
             if len(ls4_denm) < 5:
-                ls4_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+                ls4_denm.append((int(message['fields']['denm']['situation']['eventType']['causeCode'])-40,int(message['fields']['denm']['situation']['eventType']['subCauseCode'])-50))
             if len(ls4_denm) == 5:
                 list4.append(vehicle4.decide(ls4_denm))
             # print('OBU4: ' + 'DENM' + ' from OBU' + str(message['stationID']))
@@ -303,7 +303,7 @@ def on_message5(client, userdata, msg):
     elif msg.topic == 'vanetza/out/denm':
         if phase==1:
             if len(ls5_denm) < 5:
-                ls5_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+                ls5_denm.append((int(message['fields']['denm']['situation']['eventType']['causeCode'])-40,int(message['fields']['denm']['situation']['eventType']['subCauseCode'])-50))
             if len(ls5_denm) == 5:
                 list5.append(vehicle5.decide(ls5_denm))
             # print('OBU5: ' + 'DENM' + ' from OBU' + str(message['stationID']))
@@ -334,7 +334,7 @@ def on_message6(client, userdata, msg):
     elif msg.topic == 'vanetza/out/denm':
         if phase==1:
             if len(ls6_denm) < 5:
-                ls6_denm.append((message['fields']['denm']['situation']['eventType']['causeCode'],message['fields']['denm']['situation']['eventType']['subCauseCode']))
+                ls6_denm.append((int(message['fields']['denm']['situation']['eventType']['causeCode'])-40,int(message['fields']['denm']['situation']['eventType']['subCauseCode'])-50))
             if len(ls6_denm) == 5:
                 list6.append(vehicle6.decide(ls6_denm))
             # print('OBU6: ' + 'DENM' + ' from OBU' + str(message['stationID']))
@@ -483,7 +483,7 @@ while running:
             if i.exit==1 and i.geo_point.latitude>=exit1coord[0]:
                 vehicle_exiting=1
                 print("Veículo " + str(i.id) + " sai na primeira saída")
-                brokers[i.id-1].publish('vanetza/in/denm', str(createDenm(i.id,[9,7])))
+                brokers[i.id-1].publish('vanetza/in/denm', str(createDenm(i.id,[58,57])))
                 vehicle_list.remove(i)
                 print_vehicle_list()
                 i.passed_exit()
@@ -497,7 +497,7 @@ while running:
             if i.exit==2 and i.geo_point.latitude>=exit2coord[0]:
                 vehicle_exiting=2
                 print("Veículo " + str(i.id) + " sai na segunda saída")
-                brokers[i.id-1].publish('vanetza/in/denm', str(createDenm(i.id,[9,7])))
+                brokers[i.id-1].publish('vanetza/in/denm', str(createDenm(i.id,[58,57])))
                 vehicle_list.remove(i)
                 print_vehicle_list()
                 i.passed_exit()
@@ -512,7 +512,7 @@ while running:
             # if i.exit==3 and i.geo_point.latitude>=41.220500:
             if i.exit==3 and i.geo_point.latitude>=exit3coord[0]:
                 print("Veículo " + str(i.id) + " sai na terceira saída")
-                brokers[i.id-1].publish('vanetza/in/denm', str(createDenm(i.id,[9,7])))
+                brokers[i.id-1].publish('vanetza/in/denm', str(createDenm(i.id,[58,57])))
                 vehicle_list.remove(i)
                 print_vehicle_list()
                 i.passed_exit()
